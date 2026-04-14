@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 
 const activeStateByDocument = new Map();
+const UNFOLD_LEVELS = 20;
 
 function flattenSymbols(symbols, collection = []) {
   for (const symbol of symbols) {
@@ -67,7 +68,7 @@ async function toggleOnlyCurrentFunction() {
   await vscode.commands.executeCommand('editor.unfoldAll');
   await vscode.commands.executeCommand('editor.foldAll');
   await vscode.commands.executeCommand('editor.unfold', {
-    levels: 7,
+    levels: UNFOLD_LEVELS,
     selectionLines: [currentFunction.range.start.line]
   });
 
