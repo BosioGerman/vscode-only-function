@@ -1,0 +1,40 @@
+{
+  "name": "vscode-only-function",
+  "displayName": "Only Function",
+  "description": "Display only the function at the cursor by folding all other content.",
+  "version": "0.0.1",
+  "publisher": "bosiogerman",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:onlyFunction.toggle"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "onlyFunction.toggle",
+        "title": "Only Function: Toggle Current Function Focus"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "onlyFunction.toggle",
+        "key": "ctrl+alt+f",
+        "mac": "cmd+alt+f",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "echo 'No lint configured'",
+    "test": "echo 'No tests configured'"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0"
+  }
+}
