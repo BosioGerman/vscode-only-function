@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 
 const activeStateByDocument = new Map();
-const MAX_UNFOLD_DEPTH = 20;
+const MAX_UNFOLD_DEPTH = Number.MAX_SAFE_INTEGER;
 
 function flattenSymbols(symbols, collection = []) {
   for (const symbol of symbols) {
