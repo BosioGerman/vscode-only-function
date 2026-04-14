@@ -10,6 +10,8 @@ function flattenSymbols(symbols, collection = []) {
       flattenSymbols(symbol.children, collection);
     }
   }
+
+  return collection;
 }
 
 function isFunctionSymbol(symbol) {
