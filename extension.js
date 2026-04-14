@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 
 const activeStateByDocument = new Map();
-const MAX_UNFOLD_DEPTH = Number.MAX_SAFE_INTEGER;
+const UNLIMITED_UNFOLD_DEPTH = Number.MAX_SAFE_INTEGER;
 
 function flattenSymbols(symbols, collection = []) {
   for (const symbol of symbols) {
@@ -56,10 +56,12 @@ async function toggleOnlyCurrentFunction() {
     editor.document.uri
   );
 
-  const symbols = [];
-  if (Array.isArray(rawSymbols)) {
-    flattenSymbols(rawSymbols, symbols);
+  if (!Array.isArray(rawSymbols)) {
+    vscode.window.showInformationMessage('Only Function: Symbols are not available for this file type.');
+    return;
   }
+
+  const symbols = flattenSymbols(rawSymbols, []);
   const currentLine = editor.selection.active.line;
   const currentFunction = findCurrentFunctionSymbol(symbols, currentLine);
 
@@ -68,10 +70,9 @@ async function toggleOnlyCurrentFunction() {
     return;
   }
 
-  await vscode.commands.executeCommand('editor.unfoldAll');
   await vscode.commands.executeCommand('editor.foldAll');
   await vscode.commands.executeCommand('editor.unfold', {
-    levels: MAX_UNFOLD_DEPTH,
+    levels: UNLIMITED_UNFOLD_DEPTH,
     selectionLines: [currentFunction.range.start.line]
   });
 
