@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 
 const activeStateByDocument = new Map();
-const UNFOLD_LEVELS = 20;
+const MAX_UNFOLD_DEPTH = 20;
 
 function flattenSymbols(symbols, collection = []) {
   for (const symbol of symbols) {
@@ -10,8 +10,6 @@ function flattenSymbols(symbols, collection = []) {
       flattenSymbols(symbol.children, collection);
     }
   }
-
-  return collection;
 }
 
 function isFunctionSymbol(symbol) {
@@ -56,7 +54,10 @@ async function toggleOnlyCurrentFunction() {
     editor.document.uri
   );
 
-  const symbols = Array.isArray(rawSymbols) ? flattenSymbols(rawSymbols) : [];
+  const symbols = [];
+  if (Array.isArray(rawSymbols)) {
+    flattenSymbols(rawSymbols, symbols);
+  }
   const currentLine = editor.selection.active.line;
   const currentFunction = findCurrentFunctionSymbol(symbols, currentLine);
 
@@ -68,7 +69,7 @@ async function toggleOnlyCurrentFunction() {
   await vscode.commands.executeCommand('editor.unfoldAll');
   await vscode.commands.executeCommand('editor.foldAll');
   await vscode.commands.executeCommand('editor.unfold', {
-    levels: UNFOLD_LEVELS,
+    levels: MAX_UNFOLD_DEPTH,
     selectionLines: [currentFunction.range.start.line]
   });
 
